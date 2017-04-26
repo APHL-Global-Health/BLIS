@@ -1,0 +1,246 @@
+<div class="animated fadeIn">
+  <div class="row">
+      <div class="card">
+        <div class="card-header">
+          <strong>Patient Details</strong>
+           <button type="button" class="btn btn-primary" data-toggle="modal" (click)="addPatientModal.show()">New Patient</button>
+        </div>
+        <div class="card-block">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Patient No.</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2150</td>
+              <td>Lance Opiyo</td>
+              <td>Male</td>
+              <td>1980-03-29</td>
+              <td>
+                <button type="button" class="btn btn-primary">New Test</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" (click)="editPatientModal.show()">View</button>                
+                <button type="button" class="btn btn-success" data-toggle="modal" (click)="editPatientModal.show()">Edit</button>    
+              </td>
+            </tr>
+          </tbody>
+        </table>          
+        </div>
+      </div>  
+  </div>
+  <!--/.row-->
+</div>
+<!--Add new patient-->
+<div bsModal #addPatientModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">New Patient</h4>
+        <button type="button" class="close" (click)="addPatientModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="patinetno">Patient No:</label>
+                <input type="text" class="form-control" id="patinetno" placeholder="7">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="patientname">Name:</label>
+                <input type="text" class="form-control" id="patientname" placeholder="e.g. Lance Opiyo">
+              </div>
+            </div>
+          </div><!--/.row-->
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label">Age Input Selector</label>
+              <div class="col-md-9">
+                <div class="radio">
+                  <label for="ageselector1">
+                    <input type="radio" id="ageselector1" name="ageselector" value="option1"> Age
+                  </label>
+                </div>
+                <div class="radio">
+                  <label for="ageselector2">
+                    <input type="radio" id="ageselector2" name="ageselector" value="option2"> Date Selector
+                  </label>
+                </div>                
+              </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="ccnumber">Age:</label>
+                <input type="text" class="form-control" id="age" placeholder="60">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="form-group row">
+              <label class="col-md-3 form-control-label">Gender</label>
+              <div class="col-md-9">
+                <div class="radio">
+                  <label for="gender1">
+                    <input type="radio" id="gender1" name="gender" value="option1"> Male
+                  </label>
+                </div>
+                <div class="radio">
+                  <label for="gender2">
+                    <input type="radio" id="gender2" name="gender" value="option2"> Female
+                  </label>
+                </div>                
+              </div>
+            </div>
+          <div class="row">
+            
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="physicaladdress">Physical Address</label>
+                <input type="text" class="form-control" id="physicaladdress">
+              </div>
+            </div>
+          </div><!--/.row-->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="phoneno">Phone Number</label>
+                <input type="text" class="form-control" id="phoneno">
+              </div>
+            </div>
+          </div><!--/.row-->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="text" class="form-control" id="email">
+              </div>
+            </div>
+          </div><!--/.row-->
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addPatientModal.hide()">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--Edit new patient-->
+
+<div bsModal #editPatientModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Patient</h4>
+        <button type="button" class="close" (click)="editPatientModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="patinetno">Patient No:</label>
+                <input type="text" class="form-control" id="patinetno" placeholder="7">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="patientname">Name:</label>
+                <input type="text" class="form-control" id="patientname" placeholder="e.g. Lance Opiyo">
+              </div>
+            </div>
+          </div><!--/.row-->
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label">Age Input Selector</label>
+              <div class="col-md-9">
+                <div class="radio">
+                  <label for="ageselector1">
+                    <input type="radio" id="ageselector1" name="ageselector" value="option1"> Age
+                  </label>
+                </div>
+                <div class="radio">
+                  <label for="ageselector2">
+                    <input type="radio" id="ageselector2" name="ageselector" value="option2"> Date Selector
+                  </label>
+                </div>                
+              </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="ccnumber">Age:</label>
+                <input type="text" class="form-control" id="age" placeholder="60">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="form-group row">
+              <label class="col-md-3 form-control-label">Gender</label>
+              <div class="col-md-9">
+                <div class="radio">
+                  <label for="gender1">
+                    <input type="radio" id="gender1" name="gender" value="option1"> Male
+                  </label>
+                </div>
+                <div class="radio">
+                  <label for="gender2">
+                    <input type="radio" id="gender2" name="gender" value="option2"> Female
+                  </label>
+                </div>                
+              </div>
+            </div>
+          <div class="row">            
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="physicaladdress">Physical Address</label>
+                <input type="text" class="form-control" id="physicaladdress">
+              </div>
+            </div>
+          </div><!--/.row-->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="phoneno">Phone Number</label>
+                <input type="text" class="form-control" id="phoneno">
+              </div>
+            </div>
+          </div><!--/.row-->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="text" class="form-control" id="email">
+              </div>
+            </div>
+          </div><!--/.row-->
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="editPatientModal.hide()">Close</button>
+        <button type="button" class="btn btn-success">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

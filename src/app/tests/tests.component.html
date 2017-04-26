@@ -1,0 +1,256 @@
+<div class="animated fadeIn">
+  <div class="row">
+      <div class="card">
+        <div class="card-header">
+          <strong>Tests List</strong>
+           <button type="button" class="btn btn-primary" data-toggle="modal" (click)="addTestModal.show()">New Test</button>
+        </div>
+        <div class="card-block">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Patient No.</th>
+            <th>Visit No.</th>
+            <th>Patient Name</th>
+            <th>Date Ordered</th>
+            <th>Specimen ID</th>
+            <th>Test Type</th>
+            <th>Visit Type</th>
+            <th>Test Status</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2150</td>
+              <td>2150</td>
+              <td>Lance Opiyo</td>
+              <td>1980-03-29</td>
+              <td>Lance Opiyo</td>
+              <td>PAR-17</td>
+              <td>Out Patient</td>
+              <td>
+                <span class='label label-default'>Test Not Recieved</span>   
+                <span class='label label-primary'>Test Started</span>   
+                <span class='label label-primary'>Test Pending</span>   
+                <span class='label label-primary'>Test Completed</span>   
+                <span class='label label-success'>Test Verified</span>   
+                <span class='label label-default'>Specimen Not Collected</span>   
+                <span class='label label-warning'>Specimen Accepted</span>   
+                <span class='label label-warning'>Specimen Rejected</span> 
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" (click)="editTestModal.show()">View</button>                
+                <button type="button" class="btn btn-success" data-toggle="modal" (click)="editTestModal.show()">Edit</button>    
+                <button type="button" class="btn btn-primary">Accept</button>
+                <button type="button" class="btn btn-primary">Change</button>
+                <button type="button" class="btn btn-primary">Reject</button>
+                <button type="button" class="btn btn-primary">Barcode</button>
+                <button type="button" class="btn btn-primary">Verify</button>
+                <button type="button" class="btn btn-primary">Refer Sample</button>
+                <button type="button" class="btn btn-primary">Enter Results</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>          
+        </div>
+      </div>  
+  </div>
+  <!--/.row-->
+</div>
+<!--Add new patient-->
+<div bsModal #addTestModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">New Test</h4>
+        <button type="button" class="close" (click)="addTestModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">
+          <div class="row">
+           <div class="card">
+           <div class="card-header">
+              <strong>Patient Details</strong>
+            </div>
+            <div class="card-block">
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="patinetno">Patient No:</label>
+                    <label for="patinetno">2150</label>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="patinetno">Patient Name:</label>
+                    <label for="patinetno">Lance Opiyo</label>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="patinetno">Age:</label>
+                    <label for="patinetno">32</label>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="patinetno">Gender:</label>
+                    <label for="patinetno">Male</label>
+                  </div>
+                </div>
+              </div><!--/.row-->
+            </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="form-group col-sm-4">
+              <label for="ccmonth">Visit Type</label>
+              <select class="form-control" id="ccmonth">
+                <option>-Select Visit Type-</option>
+                <option>In Patient</option>
+                <option>Out Patient</option>
+              </select>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="physician">Requesting Physician:</label>
+                <input type="text" class="form-control" id="physician" placeholder="e.g. Maurice Oduor">
+              </div>
+          </div>
+          </div><!--/.row-->
+             <div class="form-group row">
+              <label class="col-md-3 form-control-label">Test</label>
+              <div class="col-md-9">
+                <div class="checkbox">
+                  <label for="testtype1">
+                    <input type="checkbox" id="testtype1" name="testtype1" value="option1"> BS for MPS
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label for="testtype2">
+                    <input type="checkbox" id="testtype2" name="testtype2" value="option2"> HB
+                  </label>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addTestModal.hide()">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--Edit new patient-->
+
+<div bsModal #editTestModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Patient</h4>
+        <button type="button" class="close" (click)="editTestModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="patinetno">Patient No:</label>
+                <input type="text" class="form-control" id="patinetno" placeholder="7">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="patientname">Name:</label>
+                <input type="text" class="form-control" id="patientname" placeholder="e.g. Lance Opiyo">
+              </div>
+            </div>
+          </div><!--/.row-->
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label">Age Input Selector</label>
+              <div class="col-md-9">
+                <div class="radio">
+                  <label for="ageselector1">
+                    <input type="radio" id="ageselector1" name="ageselector" value="option1"> Age
+                  </label>
+                </div>
+                <div class="radio">
+                  <label for="ageselector2">
+                    <input type="radio" id="ageselector2" name="ageselector" value="option2"> Date Selector
+                  </label>
+                </div>                
+              </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="ccnumber">Age:</label>
+                <input type="text" class="form-control" id="age" placeholder="60">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="form-group row">
+              <label class="col-md-3 form-control-label">Gender</label>
+              <div class="col-md-9">
+                <div class="radio">
+                  <label for="gender1">
+                    <input type="radio" id="gender1" name="gender" value="option1"> Male
+                  </label>
+                </div>
+                <div class="radio">
+                  <label for="gender2">
+                    <input type="radio" id="gender2" name="gender" value="option2"> Female
+                  </label>
+                </div>                
+              </div>
+            </div>
+          <div class="row">            
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="physicaladdress">Physical Address</label>
+                <input type="text" class="form-control" id="physicaladdress">
+              </div>
+            </div>
+          </div><!--/.row-->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="phoneno">Phone Number</label>
+                <input type="text" class="form-control" id="phoneno">
+              </div>
+            </div>
+          </div><!--/.row-->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="text" class="form-control" id="email">
+              </div>
+            </div>
+          </div><!--/.row-->
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="editTestModal.hide()">Close</button>
+        <button type="button" class="btn btn-success">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
