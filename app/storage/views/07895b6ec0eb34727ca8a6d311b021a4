@@ -1,0 +1,53 @@
+<?php $__env->startSection("content"); ?>
+
+<?php if(Session::has('message')): ?>
+	<div class="alert alert-info"><?php echo trans(Session::get('message')); ?></div>
+<?php endif; ?>
+
+	<div>
+		<ol class="breadcrumb">
+		  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+		  <li><a href="<?php echo e(URL::route('item.index')); ?>"><?php echo Lang::choice('messages.item', 2); ?></a></li>
+		  <li class="active"><?php echo Lang::choice('messages.item', 1).' '.trans('messages.details'); ?></li>
+		</ol>
+	</div>
+	<div class="panel panel-primary ">
+		<div class="panel-heading ">
+			<span class="glyphicon glyphicon-adjust"></span>
+			<?php echo Lang::choice('messages.item', 1).' '.trans('messages.details'); ?>
+
+			<div class="panel-btn">
+				<a class="btn btn-sm btn-info" href="<?php echo URL::route('item.edit', array($item->id)); ?>">
+					<span class="glyphicon glyphicon-edit"></span>
+					<?php echo trans('messages.edit'); ?>
+
+				</a>
+				<!-- Barcode -->
+				<a class="btn btn-sm btn-info" onclick="print_barcode(<?php echo "'".$item->id."'".', '."'".$barcode->encoding_format."'".', '."'".$barcode->barcode_width."'".', '."'".$barcode->barcode_height."'".', '."'".$barcode->text_size."'"; ?>)" title="<?php echo trans('messages.barcode'); ?>">
+                    <span class="glyphicon glyphicon-barcode"></span>
+                    <?php echo trans('messages.barcode'); ?>
+
+                </a>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="display-details">
+				<h3 class="view"><strong><?php echo Lang::choice('messages.name', 1); ?>:</strong><?php echo $item->name; ?> </h3>
+				<p class="view-striped"><strong><?php echo trans('messages.unit'); ?>:</strong>
+					<?php echo $item->unit; ?></p>
+				<p class="view-striped"><strong><?php echo trans('messages.quantity'); ?>:</strong>
+					<?php echo $item->quantity(); ?></p>
+				<p class="view-striped"><strong><?php echo trans('messages.min-level'); ?>:</strong>
+					<?php echo $item->min_level; ?></p>
+					<p class="view-striped"><strong><?php echo trans('messages.max-level'); ?>:</strong>
+					<?php echo $item->max_level; ?></p>
+					<p class="view-striped"><strong><?php echo trans('messages.remarks'); ?>:</strong>
+					<?php echo $item->remarks; ?></p>
+					<p class="view-striped"><strong><?php echo trans('messages.storage'); ?>:</strong>
+					<?php echo $item->storage_req; ?></p>
+				
+			</div>
+		</div>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

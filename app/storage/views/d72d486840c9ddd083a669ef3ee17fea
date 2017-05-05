@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="<?php echo URL::asset('css/bootstrap.min.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo URL::asset('css/bootstrap-theme.min.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo URL::asset('css/layout.css'); ?>" />
+        <title><?php echo Config::get('kblis.name'); ?> <?php echo Config::get('kblis.version'); ?></title>
+    </head>
+    <body>
+        <div class="container login-page">
+            <div class="login-form">
+                <div class="form-head">
+                    <img src="<?php echo Config::get('kblis.organization-logo'); ?>" alt="" height="90" width="90">
+                    <h3> <?php echo Config::get('kblis.organization'); ?> </h3>
+                    <?php if($errors->all()): ?>
+                        <div class="alert alert-danger">
+                            <?php echo HTML::ul($errors->all()); ?>
+
+                        </div>
+                    <?php elseif(Session::has('message')): ?>
+                        <div class="alert alert-danger"><?php echo Session::get('message'); ?></div>
+                    <?php endif; ?>
+                </div>
+                <?php echo Form::open(array(
+                    "route"        => "user.login",
+                    "autocomplete" => "off",
+                    "class" => "form-signin",
+                    "role" => "form"
+                )); ?>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon glyphicon glyphicon-user"></span>
+                            <?php echo Form::text("username", Input::old("username"), array(
+                                "placeholder" => trans('messages.username'),
+                                "class" => "form-control"
+                            )); ?>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                            <?php echo Form::password("password", array(
+                                "placeholder" => Lang::choice('messages.password',1),
+                                "class" => "form-control"
+                            )); ?>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <?php echo Form::button(trans('messages.login'), array(
+                                "type" => "submit",
+                                "class" => "btn btn-primary btn-block"
+                            )); ?>
+
+                        </div>
+                    </div>
+                <?php echo Form::close(); ?>
+
+                <div class="smaller-text alone foot">
+                    <p><a href="i/guide.pdf">User Guide</a></p>
+                    <p>
+                        <?php echo Config::get('kblis.name'); ?> - a port of the Basic Laboratory Information System
+                         (BLIS) to Laravel by iLabAfrica. BLIS was originally developed by C4G.
+                    </p>
+                </div>
+            </div>
+            <?php echo $__env->make("footer", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+        </div>
+    </body>
+</html>

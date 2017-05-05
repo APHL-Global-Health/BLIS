@@ -1,0 +1,505 @@
+<?php $__env->startSection("content"); ?>
+    <div>
+        <ol class="breadcrumb">
+          <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+          <li class="active"><?php echo Lang::choice('messages.test',2); ?></li>
+        </ol>
+    </div>
+    <?php if(Session::has('message')): ?>
+        <?php if(isset(Session::get('message')->danger)): ?>
+            <div class="alert alert-danger"><?php echo trans(Session::get('message')->danger); ?></div>
+        <?php elseif(isset(Session::get('message')->info)): ?>
+            <div class="alert alert-info"><?php echo trans(Session::get('message')->info); ?></div>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <div class='container-fluid'>
+        <?php echo Form::open(array('route' => array('test.index'))); ?>
+
+            <div class='row'>
+                <div class='col-md-3'>
+                        <?php echo Form::label('search', trans('messages.search'), array('class' => 'sr-only')); ?>
+
+                        <?php echo Form::text('search', Input::get('search'),
+                            array('class' => 'form-control', 'placeholder' => 'Search')); ?>
+
+                </div>
+                <div class='col-md-4'>
+                    <div class='col-md-3'>
+                        <?php echo Form::label('test_status', trans('messages.test-status')); ?>
+
+                    </div>
+                    <div class='col-md-6'>
+                        <?php echo Form::select('test_status', $testStatus,
+                            Input::get('test_status'), array('class' => 'form-control')); ?>
+
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class='col-md-3'>
+                        <?php echo Form::label('date_from', trans('messages.from')); ?>
+
+                    </div>
+                    <div class='col-md-9'>
+                        <?php echo Form::text('date_from', Input::get('date_from'), 
+                            array('class' => 'form-control standard-datepicker')); ?>
+
+                    </div>
+                </div>
+                <div class='col-md-2'>
+                    <div class='col-md-3'>
+                        <?php echo Form::label('date_to', trans('messages.to')); ?>
+
+                    </div>
+                    <div class='col-md-9'>
+                        <?php echo Form::text('date_to', Input::get('date_to'), 
+                            array('class' => 'form-control standard-datepicker')); ?>
+
+                    </div>
+                </div>
+                <div class='col-md-1'>
+                        <?php echo Form::submit(trans('messages.search'), array('class'=>'btn btn-primary')); ?>
+
+                </div>
+            </div>
+        <?php echo Form::close(); ?>
+
+    </div>
+
+    <br>
+
+    <div class="panel panel-primary tests-log">
+        <div class="panel-heading ">
+            <div class="container-fluid">
+                <div class="row less-gutter">
+                    <div class="col-md-11">
+                        <span class="glyphicon glyphicon-filter"></span><?php echo trans('messages.list-tests'); ?>
+
+                        <?php if(Auth::user()->can('request_test')): ?>
+                        <div class="panel-btn">
+                            <a class="btn btn-sm btn-info" href="javascript:void(0)"
+                                data-toggle="modal" data-target="#new-test-modal">
+                                <span class="glyphicon glyphicon-plus-sign"></span>
+                                <?php echo trans('messages.new-test'); ?>
+
+                            </a>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="col-md-1">
+                        <a class="btn btn-sm btn-primary pull-right" href="#" onclick="window.history.back();return false;"
+                            alt="<?php echo trans('messages.back'); ?>" title="<?php echo trans('messages.back'); ?>">
+                            <span class="glyphicon glyphicon-backward"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th><?php echo trans('messages.date-ordered'); ?></th>
+                        <th><?php echo trans('messages.patient-number'); ?></th>
+                        <th><?php echo trans('messages.visit-number'); ?></th>
+                        <th class="col-md-2"><?php echo trans('messages.patient-name'); ?></th>
+                        <th class="col-md-1"><?php echo trans('messages.specimen-id'); ?></th>
+                        <th><?php echo Lang::choice('messages.test',1); ?></th>
+                        <th><?php echo trans('messages.visit-type'); ?></th>
+                        <th><?php echo trans('messages.test-status'); ?></th>
+                        <th class="col-md-3"><?php echo trans('messages.test-status'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+              
+                <?php foreach($testSet as $key => $test): ?>
+
+                      <?php
+                $rowclass = 'low_priority_tr';
+                    if ($test->priority == '1'){
+                $rowclass = 'high_priority_tr';
+                    
+                    }elseif ($test->priority == '2') {
+                        $rowclass = 'completed_high_priority_tr';
+                    }
+
+                ?>
+
+                    <tr class="<?php echo $rowclass; ?>"
+                        <?php if(Session::has('activeTest')): ?>
+                            <?php echo in_array($test->id, Session::get('activeTest'))?"class='info'":""; ?>
+
+                        <?php endif; ?>
+
+                        
+                        >
+                        <td><?php echo date('d-m-Y H:i', strtotime($test->time_created));; ?></td>  <!--Date Ordered-->
+                        <td><?php echo empty($test->visit->patient->external_patient_number)?
+                                $test->visit->patient->patient_number:
+                                $test->visit->patient->external_patient_number; ?></td> <!--Patient Number -->
+                        <td><?php echo empty($test->visit->visit_number)?
+                                $test->visit->id:
+                                $test->visit->visit_number; ?></td> <!--Visit Number -->
+                        <td><?php echo $test->visit->patient->name.' ('.($test->visit->patient->getGender(true)).',
+                            '.$test->visit->patient->getAge('Y'). ')'; ?></td> <!--Patient Name -->
+                        <td><?php echo $test->getSpecimenId(); ?></td> <!--Specimen ID -->
+                        <td><?php echo $test->testType->name; ?></td> <!--Test-->
+                        <td><?php echo $test->visit->visit_type; ?></td> <!--Visit Type -->
+                        <td id="test-status-<?php echo $test->id; ?>" class='test-status'>
+                            <!-- Test Statuses -->
+                            <div class="container-fluid">
+                            
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <?php if($test->isNotReceived()): ?>
+                                            <?php if(!$test->isPaid()): ?>
+                                                <span class='label label-default'>
+                                                    <?php echo trans('messages.not-paid'); ?></span>
+                                            <?php else: ?>
+                                            <span class='label label-default'>
+                                                <?php echo trans('messages.not-received'); ?></span>
+                                            <?php endif; ?>
+                                        <?php elseif($test->isPending()): ?>
+                                            <span class='label label-info'>
+                                                <?php echo trans('messages.pending'); ?></span>
+                                        <?php elseif($test->isStarted()): ?>
+                                            <span class='label label-warning'>
+                                                <?php echo trans('messages.started'); ?></span>
+                                        <?php elseif($test->isCompleted()): ?>
+                                            <span class='label label-primary'>
+                                                <?php echo trans('messages.completed'); ?></span>
+                                        <?php elseif($test->isVerified()): ?>
+                                            <span class='label label-success'>
+                                                <?php echo trans('messages.verified'); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+    
+                                    </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- Specimen statuses -->
+                                        <?php if($test->specimen->isNotCollected()): ?>
+                                         <?php if(($test->isPaid())): ?>
+                                            <span class='label label-default'>
+                                                <?php echo trans('messages.specimen-not-collected-label'); ?></span>
+                                            <?php endif; ?>
+                                        <?php elseif($test->specimen->isReferred()): ?>
+                                            <span class='label label-primary'>
+                                                <?php echo trans('messages.specimen-referred-label'); ?>
+
+                                                <?php if($test->specimen->referral->status == Referral::REFERRED_IN): ?>
+                                                    <?php echo trans("messages.in"); ?>
+
+                                                <?php elseif($test->specimen->referral->status == Referral::REFERRED_OUT): ?>
+                                                    <?php echo trans("messages.out"); ?>
+
+                                                <?php endif; ?>
+                                            </span>
+                                        <?php elseif($test->specimen->isAccepted()): ?>
+                                            <span class='label label-success'>
+                                                <?php echo trans('messages.specimen-accepted-label'); ?></span>
+                                        <?php elseif($test->specimen->isRejected()): ?>
+                                            <span class='label label-danger'>
+                                                <?php echo trans('messages.specimen-rejected-label'); ?></span>
+                                        <?php endif; ?>
+                                        </div></div></div>
+                        </td>
+                        <!-- ACTION BUTTONS -->
+                        <td>
+                            <a class="btn btn-sm btn-success"
+                                href="<?php echo URL::route('test.viewDetails', $test->id); ?>"
+                                id="view-details-<?php echo $test->id; ?>-link" 
+                                title="<?php echo trans('messages.view-details-title'); ?>">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <?php echo trans('messages.view-details'); ?>
+
+                            </a>
+                        <?php if($test->isNotReceived()): ?> 
+                            <?php if(Auth::user()->can('receive_external_test') && $test->isPaid()): ?>
+                                <a class="btn btn-sm btn-default receive-test" href="javascript:void(0)"
+                                    data-test-id="<?php echo $test->id; ?>" data-specimen-id="<?php echo $test->specimen->id; ?>"
+                                    title="<?php echo trans('messages.receive-test-title'); ?>">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                    <?php echo trans('messages.receive-test'); ?>
+
+                                </a>
+                            <?php endif; ?>
+                        <?php elseif($test->specimen->isNotCollected()): ?>
+                            <?php if(Auth::user()->can('accept_test_specimen')): ?>
+                                <a class="btn btn-sm btn-info accept-specimen" href="javascript:void(0)"
+                                    data-test-id="<?php echo $test->id; ?>" data-specimen-id="<?php echo $test->specimen->id; ?>"
+                                    title="<?php echo trans('messages.accept-specimen-title'); ?>"
+                                    data-url="<?php echo URL::route('test.acceptSpecimen'); ?>">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                    <?php echo trans('messages.accept-specimen'); ?>
+
+                                </a>
+                            <?php endif; ?>
+                            <?php if(count($test->testType->specimenTypes) > 1 && Auth::user()->can('change_test_specimen')): ?>
+                                <!-- 
+                                    If this test can be done using more than 1 specimen type,
+                                    allow the user to change to any of the other eligible ones.
+                                -->
+                                <a class="btn btn-sm btn-danger change-specimen" href="#change-specimen-modal"
+                                    data-toggle="modal" data-url="<?php echo URL::route('test.changeSpecimenType'); ?>"
+                                    data-test-id="<?php echo $test->id; ?>" data-target="#change-specimen-modal"
+                                    title="<?php echo trans('messages.change-specimen-title'); ?>">
+                                    <span class="glyphicon glyphicon-transfer"></span>
+                                    <?php echo trans('messages.change-specimen'); ?>
+
+                                </a>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <?php if($test->specimen->isAccepted() && !($test->isVerified())): ?>
+                            <?php if(Auth::user()->can('reject_test_specimen') && !($test->specimen->isReferred())): ?>
+                                <a class="btn btn-sm btn-danger" id="reject-<?php echo $test->id; ?>-link"
+                                    href="<?php echo URL::route('test.reject', array($test->specimen_id)); ?>"
+                                    title="<?php echo trans('messages.reject-title'); ?>">
+                                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                                    <?php echo trans('messages.reject'); ?>
+
+                                </a>
+                                <a class="btn btn-sm btn-midnight-blue barcode-button" onclick="print_barcode(<?php echo "'".$test->specimen->id."'".', '."'".$barcode->encoding_format."'".', '."'".$barcode->barcode_width."'".', '."'".$barcode->barcode_height."'".', '."'".$barcode->text_size."'"; ?>)" title="<?php echo trans('messages.barcode'); ?>">
+                                    <span class="glyphicon glyphicon-barcode"></span>
+                                    <?php echo trans('messages.barcode'); ?>
+
+                                </a>
+                            <?php endif; ?>
+                            <?php if($test->isPending()): ?>
+                                <?php if(Auth::user()->can('start_test')): ?>
+                                    <a class="btn btn-sm btn-warning start-test" href="javascript:void(0)"
+                                        data-test-id="<?php echo $test->id; ?>" data-url="<?php echo URL::route('test.start'); ?>"
+                                        title="<?php echo trans('messages.start-test-title'); ?>">
+                                        <span class="glyphicon glyphicon-play"></span>
+                                        <?php echo trans('messages.start-test'); ?>
+
+                                    </a>
+                                <?php endif; ?>
+                                <?php if(Auth::user()->can('refer_specimens') && !($test->isExternal()) && !($test->specimen->isReferred())): ?>
+                                    <a class="btn btn-sm btn-info" href="<?php echo URL::route('test.refer', array($test->specimen_id)); ?>">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                        <?php echo trans('messages.refer-sample'); ?>
+
+                                    </a>
+                                <?php endif; ?>
+                            <?php elseif($test->isStarted()): ?>
+                                <?php if(Auth::user()->can('enter_test_results')): ?>
+                                    <a class="btn btn-sm btn-info" id="enter-results-<?php echo $test->id; ?>-link"
+                                        href="<?php echo URL::route('test.enterResults', array($test->id)); ?>"
+                                        title="<?php echo trans('messages.enter-results-title'); ?>">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                        <?php echo trans('messages.enter-results'); ?>
+
+                                    </a>
+                                <?php endif; ?>
+                            <?php elseif($test->isCompleted()): ?>
+                                <?php if(Auth::user()->can('edit_test_results')): ?>
+                                    <a class="btn btn-sm btn-info" id="edit-<?php echo $test->id; ?>-link"
+                                        href="<?php echo URL::route('test.edit', array($test->id)); ?>"
+                                        title="<?php echo trans('messages.edit-test-results'); ?>">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                        <?php echo trans('messages.edit'); ?>
+
+                                    </a>
+                                <?php endif; ?>
+                                <?php if(Auth::user()->can('verify_test_results') && Auth::user()->id != $test->tested_by): ?>
+                                    <a class="btn btn-sm btn-success" id="verify-<?php echo $test->id; ?>-link"
+                                        href="<?php echo URL::route('test.viewDetails', array($test->id)); ?>"
+                                        title="<?php echo trans('messages.verify-title'); ?>">
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        <?php echo trans('messages.verify'); ?>
+
+                                    </a>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            
+            <?php echo $testSet->links(); ?>
+
+        <?php echo Session::put('SOURCE_URL', URL::full()); ?>
+
+        <?php echo Session::put('TESTS_FILTER_INPUT', Input::except('_token'));; ?>
+
+        
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal fade" id="new-test-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <?php echo Form::open(array('route' => 'test.create')); ?>
+
+          <input type="hidden" id="patient_id" name="patient_id" value="0" />
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only"><?php echo trans('messages.close'); ?></span>
+            </button>
+            <h4 class="modal-title"><?php echo trans('messages.create-new-test'); ?></h4>
+          </div>
+          <div class="modal-body">
+            <h4><?php echo trans('messages.first-select-patient'); ?></h4>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="input-group">
+                  <input type="text" class="form-control search-text" 
+                    placeholder="<?php echo trans('messages.search-patient-placeholder'); ?>">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default search-patient" type="button">
+                        <?php echo trans('messages.patient-search-button'); ?></button>
+                  </span>
+                </div><!-- /input-group -->
+                <div class="patient-search-result form-group">
+                    <table class="table table-condensed table-striped table-bordered table-hover hide">
+                      <thead>
+                        <th> </th>
+                        <th><?php echo trans('messages.patient-id'); ?></th>
+                        <th><?php echo Lang::choice('messages.name',2); ?></th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                </div>
+              </div><!-- /.col-lg-12 -->
+            </div><!-- /.row -->          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                <?php echo trans('messages.close'); ?></button>
+            <button type="button" class="btn btn-primary next" onclick="submit();" disabled>
+                <?php echo trans('messages.next'); ?></button>
+          </div>
+        <?php echo Form::close(); ?>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="change-specimen-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <?php echo Form::open(array('route' => 'test.updateSpecimenType')); ?>
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only"><?php echo trans('messages.close'); ?></span>
+            </button>
+            <h4 class="modal-title">
+                <span class="glyphicon glyphicon-transfer"></span>
+                <?php echo trans('messages.change-specimen-title'); ?></h4>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <?php echo Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'),
+                array('class' => 'btn btn-primary', 'data-dismiss' => 'modal', 'onclick' => 'submit()')); ?>
+
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                <?php echo trans('messages.close'); ?></button>
+          </div>
+        <?php echo Form::close(); ?>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal /#change-specimen-modal-->
+
+    <!-- OTHER UI COMPONENTS -->
+    <div class="hidden pending-test-not-collected-specimen">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class='label label-info'>
+                        <?php echo trans('messages.pending'); ?></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class='label label-default'>
+                        <?php echo trans('messages.specimen-not-collected-label'); ?></span>                
+                </div>
+            </div>
+        </div>
+    </div> <!-- /. pending-test-not-collected-specimen -->
+
+    <div class="hidden pending-test-accepted-specimen">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class='label label-info'>
+                        <?php echo trans('messages.pending'); ?></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class='label label-success'>
+                        <?php echo trans('messages.specimen-accepted-label'); ?></span>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /. pending-test-accepted-specimen -->
+
+    <div class="hidden started-test-accepted-specimen">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class='label label-warning'>
+                        <?php echo trans('messages.started'); ?></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class='label label-success'>
+                        <?php echo trans('messages.specimen-accepted-label'); ?></span>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /. started-test-accepted-specimen -->
+
+    <div class="hidden accept-button">
+        <a class="btn btn-sm btn-info accept-specimen" href="javascript:void(0)"
+            title="<?php echo trans('messages.accept-specimen-title'); ?>"
+            data-url="<?php echo URL::route('test.acceptSpecimen'); ?>">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+            <?php echo trans('messages.accept-specimen'); ?>
+
+        </a>
+    </div> <!-- /. accept-button -->
+
+    <div class="hidden reject-start-buttons">
+        <a class="btn btn-sm btn-danger reject-specimen" href="#" title="<?php echo trans('messages.reject-title'); ?>">
+            <span class="glyphicon glyphicon-thumbs-down"></span>
+            <?php echo trans('messages.reject'); ?></a>
+        <a class="btn btn-sm btn-warning start-test" href="javascript:void(0)"
+            data-url="<?php echo URL::route('test.start'); ?>" title="<?php echo trans('messages.start-test-title'); ?>">
+            <span class="glyphicon glyphicon-play"></span>
+            <?php echo trans('messages.start-test'); ?></a>
+    </div> <!-- /. reject-start-buttons -->
+
+    <div class="hidden enter-result-buttons">
+        <a class="btn btn-sm btn-info enter-result">
+            <span class="glyphicon glyphicon-pencil"></span>
+            <?php echo trans('messages.enter-results'); ?></a>
+    </div> <!-- /. enter-result-buttons -->
+
+    <div class="hidden start-refer-button">
+        <a class="btn btn-sm btn-info refer-button" href="#">
+            <span class="glyphicon glyphicon-edit"></span>
+            <?php echo trans('messages.refer-sample'); ?>
+
+        </a>
+    </div> <!-- /. referral-button -->
+    <!-- Barcode begins -->
+    
+    <div id="count" style='display:none;'>0</div>
+    <div id ="barcodeList" style="display:none;"></div>
+
+    <!-- jQuery barcode script -->
+    <script type="text/javascript" src="<?php echo asset('js/barcode.js'); ?> "></script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

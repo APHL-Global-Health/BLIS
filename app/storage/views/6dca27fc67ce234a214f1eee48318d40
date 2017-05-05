@@ -1,0 +1,79 @@
+<?php $__env->startSection("content"); ?>
+<div>
+	<ol class="breadcrumb">
+	  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+	  <li class="active"><?php echo Lang::choice('messages.test-type',1); ?></li>
+	</ol>
+</div>
+<?php if(Session::has('message')): ?>
+	<div class="alert alert-info"><?php echo trans(Session::get('message')); ?></div>
+<?php endif; ?>
+<div class="panel panel-primary">
+	<div class="panel-heading ">
+		<span class="glyphicon glyphicon-cog"></span>
+		<?php echo trans('messages.list-test-types'); ?>
+
+		<div class="panel-btn">
+			<a class="btn btn-sm btn-info" href="<?php echo URL::to("testtype/create"); ?>" >
+				<span class="glyphicon glyphicon-plus-sign"></span>
+				<?php echo trans('messages.new-test-type'); ?>
+
+			</a>
+		</div>
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped table-hover table-condensed search-table">
+			<thead>
+				<tr>
+					<th><?php echo Lang::choice('messages.name',1); ?></th>
+					<th><?php echo trans('messages.description'); ?></th>
+					<th><?php echo trans('messages.target-turnaround-time'); ?></th>
+					<th><?php echo trans('messages.prevalence-threshold'); ?></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($testtypes as $key => $value): ?>
+				<tr <?php if(Session::has('activetesttype')): ?>
+                            <?php echo (Session::get('activetesttype') == $value->id)?"class='info'":""; ?>
+
+                        <?php endif; ?>
+                        >
+					<td><?php echo $value->name; ?></td>
+					<td><?php echo $value->description; ?></td>
+					<td><?php echo $value->targetTAT; ?></td>
+					<td><?php echo $value->prevalence_threshold; ?></td>
+					<td>
+						<!-- show the testtype (uses the show method found at GET /testtype/{id} -->
+						<a class="btn btn-sm btn-success" href="<?php echo URL::to("testtype/" . $value->id); ?>">
+							<span class="glyphicon glyphicon-eye-open"></span>
+							<?php echo trans('messages.view'); ?>
+
+						</a>
+
+						<!-- edit this testtype (uses the edit method found at GET /testtype/{id}/edit -->
+						<a class="btn btn-sm btn-info" href="<?php echo URL::to("testtype/" . $value->id . "/edit"); ?>" >
+							<span class="glyphicon glyphicon-edit"></span>
+							<?php echo trans('messages.edit'); ?>
+
+						</a>
+						<!-- delete this testtype (uses the delete method found at GET /testtype/{id}/delete -->
+						<button class="btn btn-sm btn-danger delete-item-link"
+							data-toggle="modal" data-target=".confirm-delete-modal"	
+							data-id='<?php echo URL::to("testtype/" . $value->id . "/delete"); ?>'>
+							<span class="glyphicon glyphicon-trash"></span>
+							<?php echo trans('messages.delete'); ?>
+
+						</button>
+
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php echo Session::put('SOURCE_URL', URL::full()); ?>
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

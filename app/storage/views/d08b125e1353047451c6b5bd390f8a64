@@ -1,0 +1,204 @@
+<?php $__env->startSection("content"); ?>
+<div>
+	<ol class="breadcrumb">
+	  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+	  <li class="active"><a href="<?php echo URL::route('reports.patient.index'); ?>"><?php echo Lang::choice('messages.report', 2); ?></a></li>
+	  <li class="active"><?php echo trans('messages.patient-report'); ?></li>
+	</ol>
+</div>
+<div class='container-fluid'>
+    <?php echo Form::open(array('url' => 'patientreport/'.$patient->id, 'class' => 'form-inline', 'id' => 'form-patientreport-filter', 'method'=>'POST')); ?>
+
+		<?php echo Form::hidden('patient', $patient->id, array('id' => 'patient')); ?>
+
+		<div class="row">
+			<div class="col-sm-3">
+				<label class="checkbox-inline">
+	        		<?php echo Form::checkbox('pending', "1", isset($pending)); ?><?php echo trans('messages.include-pending-tests'); ?>
+
+				</label>
+			</div>
+			<div class="col-sm-3">
+				<div class="row">
+					<div class="col-sm-2">
+						<?php echo Form::label('start', trans("messages.from")); ?></div><div class="col-sm-1">
+			        	<?php echo Form::text('start', isset($input['start'])?$input['start']:null, 
+			                array('class' => 'form-control standard-datepicker')); ?>
+
+			        </div>
+		        </div>
+	        </div>
+	        <div class="col-sm-3">
+				<div class="row">
+			        <div class="col-sm-2">
+				        <?php echo Form::label('end', trans("messages.to")); ?>
+
+				    </div>
+				    <div class="col-sm-1">
+		                <?php echo Form::text('end', isset($input['end'])?$input['end']:null, 
+		                    array('class' => 'form-control standard-datepicker')); ?>
+
+		            </div>
+	            </div>
+            </div>
+            <div class="col-sm-3">
+				<div class="row">
+		            <div class="col-sm-4">
+			            <?php echo Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+			                    array('class' => 'btn btn-primary', 'id' => 'filter', 'type' => 'submit')); ?>
+
+		            </div>
+		            <?php if(count($verified) == count($tests)): ?>
+		            <div class="col-sm-1">
+				        <?php echo Form::submit(trans('messages.export-to-word'), array('class' => 'btn btn-success', 
+				        	'id' => 'word', 'name' => 'word')); ?>
+
+				    </div>
+				    <?php endif; ?>
+			    </div>
+		    </div>
+	    </div>
+	    <?php echo Form::hidden('visit_id', $visit, array('id'=>'visit_id')); ?>
+
+	<?php echo Form::close(); ?>
+
+</div>
+<br />
+<div class="panel panel-primary" id="patientReport">
+	<div class="panel-heading ">
+		<span class="glyphicon glyphicon-user"></span>
+		<?php echo trans('messages.patient-report'); ?>
+
+	</div>
+	<div class="panel-body">
+		<?php if($error!=''): ?>
+		<!-- if there are search errors, they will show here -->
+			<div class="alert alert-info"><?php echo $error; ?></div>
+		<?php else: ?>
+
+		<div id="report_content">
+		<?php echo $__env->make("reportHeader", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+		<strong>
+			<p>
+				<?php echo trans('messages.patient-report').' - '.date('d-m-Y'); ?>
+
+			</p>
+		</strong>
+		<table class="table table-bordered">
+			<tbody>
+				<tr>
+					<th><?php echo trans('messages.patient-name'); ?></th>
+					<?php if(Entrust::can('view_names')): ?>
+						<td><?php echo $patient->name; ?></td>
+					<?php else: ?>
+						<td>N/A</td>
+					<?php endif; ?>
+					<th><?php echo trans('messages.gender'); ?></th>
+					<td><?php echo $patient->getGender(false); ?></td>
+				</tr>
+				<tr>
+					<th><?php echo trans('messages.patient-id'); ?></th>
+					<td><?php echo $patient->patient_number; ?></td>
+					<th><?php echo trans('messages.age'); ?></th>
+					<td><?php echo $patient->getAge(); ?></td>
+				</tr>
+				<tr>
+					<th><?php echo trans('messages.patient-lab-number'); ?></th>
+					<td><?php echo $patient->external_patient_number; ?></td>
+					<th><?php echo trans('messages.requesting-facility-department'); ?></th>
+					<td><?php echo Config::get('kblis.organization'); ?></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-bordered">
+			<tbody>
+				<tr>
+					<th colspan="7"><?php echo trans('messages.specimen'); ?></th>
+				</tr>
+				<tr>
+					<th><?php echo Lang::choice('messages.specimen-type', 1); ?></th>
+					<th><?php echo Lang::choice('messages.test', 2); ?></th>
+					<th><?php echo trans('messages.date-ordered'); ?></th>
+					<th><?php echo Lang::choice('messages.test-category', 2); ?></th>
+					<th><?php echo trans('messages.specimen-status'); ?></th>
+					<th><?php echo trans('messages.collected-by')."/".trans('messages.rejected-by'); ?></th>
+					<th><?php echo trans('messages.date-checked'); ?></th>
+				</tr>
+				<?php $__empty_1 = true; foreach($tests as $test): $__empty_1 = false; ?>
+						<tr>
+							<td><?php echo $test->specimen->specimenType->name; ?></td>
+							<td><?php echo $test->testType->name; ?></td>
+							<td><?php echo $test->isExternal()?$test->external()->request_date:$test->time_created; ?></td>
+							<td><?php echo $test->testType->testCategory->name; ?></td>
+							<?php if($test->specimen->specimen_status_id == Specimen::NOT_COLLECTED): ?>
+								<td><?php echo trans('messages.specimen-not-collected'); ?></td>
+								<td></td>
+								<td></td>
+							<?php elseif($test->specimen->specimen_status_id == Specimen::ACCEPTED): ?>
+								<td><?php echo trans('messages.specimen-accepted'); ?></td>
+								<td><?php echo $test->specimen->acceptedBy->name; ?></td>
+								<td><?php echo $test->specimen->time_accepted; ?></td>
+							<?php elseif($test->specimen->specimen_status_id == Specimen::REJECTED): ?>
+								<td><?php echo trans('messages.specimen-rejected'); ?></td>
+								<td><?php echo $test->specimen->rejectedBy->name; ?></td>
+								<td><?php echo $test->specimen->time_rejected; ?></td>
+							<?php endif; ?>
+						</tr>
+				<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="7"><?php echo trans("messages.no-records-found"); ?></td>
+					</tr>
+				<?php endif; ?>
+
+			</tbody>
+		</table>
+		<table class="table table-bordered">
+			<tbody>
+				<tr>
+					<th colspan="8"><?php echo trans('messages.test-results'); ?></th>
+				</tr>
+				<tr>
+					<th><?php echo Lang::choice('messages.test-type', 1); ?></th>
+					<th><?php echo trans('messages.test-results-values'); ?></th>
+					<th><?php echo trans('messages.test-remarks'); ?></th>
+					<th><?php echo trans('messages.tested-by'); ?></th>
+					<th><?php echo trans('messages.results-entry-date'); ?></th>
+					<th><?php echo trans('messages.date-tested'); ?></th>
+					<th><?php echo trans('messages.verified-by'); ?></th>
+					<th><?php echo trans('messages.date-verified'); ?></th>
+				</tr>
+				<?php $__empty_1 = true; foreach($tests as $test): $__empty_1 = false; ?>
+						<tr>
+							<td><?php echo $test->testType->name; ?></td>
+							<td>
+								<?php foreach($test->testResults as $result): ?>
+									<p>
+										<?php echo Measure::find($result->measure_id)->name; ?>: <?php echo $result->result; ?>
+
+										<?php echo Measure::getRange($test->visit->patient, $result->measure_id); ?>
+
+										<?php echo Measure::find($result->measure_id)->unit; ?>
+
+									</p>
+								<?php endforeach; ?></td>
+							<td><?php echo $test->interpretation == '' ? 'N/A' : $test->interpretation; ?></td>
+							<td><?php echo isset($test->testedBy->name) ? $test->testedBy->name : trans('messages.pending'); ?></td>
+							<td><?php echo $test->testResults->last()->time_entered; ?></td>
+							<td><?php echo $test->time_completed; ?></td>
+							<td><?php echo isset($test->verifiedBy->name) ? $test->verifiedBy->name : trans('messages.verification-pending'); ?></td>
+							<td><?php echo $test->time_verified; ?></td>
+						</tr>
+				<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="8"><?php echo trans("messages.no-records-found"); ?></td>
+					</tr>
+				<?php endif; ?>
+			</tbody>
+		</table></div>
+		<?php endif; ?>
+		</div>
+	</div>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

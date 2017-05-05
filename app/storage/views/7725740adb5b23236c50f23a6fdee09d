@@ -1,0 +1,115 @@
+<?php $__env->startSection("content"); ?>
+
+	<div>
+		<ol class="breadcrumb">
+		  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+		  <li>
+		  	<a href="<?php echo URL::route('test.index'); ?>"><?php echo Lang::choice('messages.test',2); ?></a>
+		  </li>
+		  <li class="active"><?php echo trans('messages.new-test'); ?></li>
+		</ol>
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-heading ">
+            <div class="container-fluid">
+                <div class="row less-gutter">
+                    <div class="col-md-11">
+						<span class="glyphicon glyphicon-adjust"></span><?php echo trans('messages.new-test'); ?>
+
+                    </div>
+                    <div class="col-md-1">
+                        <a class="btn btn-sm btn-primary pull-right" href="#" onclick="window.history.back();return false;"
+                            alt="<?php echo trans('messages.back'); ?>" title="<?php echo trans('messages.back'); ?>">
+                            <span class="glyphicon glyphicon-backward"></span></a>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<div class="panel-body">
+		<!-- if there are creation errors, they will show here -->
+			<?php if($errors->all()): ?>
+				<div class="alert alert-danger">
+					<?php echo HTML::ul($errors->all()); ?>
+
+				</div>
+			<?php endif; ?>
+
+			<?php echo Form::open(array('route' => 'test.saveNewTest', 'id' => 'form-new-test')); ?>
+
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<h3 class="panel-title"><?php echo trans("messages.patient-details"); ?></h3>
+								</div>
+								<div class="panel-body inline-display-details">
+									<span><strong><?php echo trans("messages.patient-number"); ?></strong> <?php echo $patient->patient_number; ?></span>
+									<span><strong><?php echo Lang::choice('messages.name',1); ?></strong> <?php echo $patient->name; ?></span>
+									<span><strong><?php echo trans("messages.age"); ?></strong> <?php echo $patient->getAge(); ?></span>
+									<span><strong><?php echo trans("messages.gender"); ?></strong>
+										<?php echo $patient->gender==0?trans("messages.male"):trans("messages.female"); ?></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<?php echo Form::hidden('patient_id', $patient->id); ?>
+
+								<?php echo Form::label('visit_type', trans("messages.visit-type")); ?>
+
+								<?php echo Form::select('visit_type', [' ' => '--- Select visit type ---','0' => trans("messages.out-patient"),'1' => trans("messages.in-patient")], null,
+									 array('class' => 'form-control')); ?>
+
+							</div>
+							<div class="form-group">
+								<?php echo Form::label('physician', trans("messages.physician")); ?>
+
+								<?php echo Form::text('physician', Input::old('physician'), array('class' => 'form-control')); ?>
+
+							</div>
+							<div class="form-group">
+								<?php echo Form::label('priority', trans("messages.high-priority")); ?>
+
+								<?php echo Form::checkbox('priority'); ?>
+
+							</div>
+							<div class="form-group">
+								<?php echo Form::label('tests', trans("messages.select-tests")); ?>
+
+								<div class="form-pane">
+
+									<table class="table table-striped table-hover table-condensed search-table">
+									<thead>
+										<tr>
+											<th><?php echo Lang::choice('messages.test',2); ?></th>
+											<th><?php echo trans('messages.actions'); ?></th>
+														
+										</tr>
+									</thead>
+									<tbody>
+									<?php foreach($testtypes as $key => $value): ?>
+										<tr>
+											<td><?php echo $value->name; ?></td>
+											<td><label  class="editor-active">
+												<input type="checkbox" name="testtypes[]" value="<?php echo $value->id; ?>" />
+												</label>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+									</tbody>
+						            </table>
+				
+								<div class="form-group actions-row">
+								<?php echo Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save-test'), 
+									array('class' => 'btn btn-primary', 'onclick' => 'submit()', 'alt' => 'save_new_test')); ?>
+
+								</div>
+						</div>
+					</div>
+				</div>
+
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+<?php $__env->stopSection(); ?>	
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

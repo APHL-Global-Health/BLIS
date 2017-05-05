@@ -1,0 +1,71 @@
+<?php $__env->startSection("content"); ?>
+
+	<div>
+		<ol class="breadcrumb">
+		  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+		  <li>
+		  	<a href="<?php echo URL::route('blood.index'); ?>"><?php echo trans('messages.blood-bank'); ?></a>
+		  </li>
+		  <li class="active"><?php echo trans('messages.add-new'); ?></li>
+		</ol>
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-heading ">
+			<span class="glyphicon glyphicon-adjust"></span>
+			<?php echo trans('messages.add-new'); ?>
+
+		</div>
+		<div class="panel-body">
+		<!-- if there are creation errors, they will show here -->
+			<?php if($errors->all()): ?>
+				<div class="alert alert-danger">
+					<?php echo HTML::ul($errors->all()); ?>
+
+				</div>
+			<?php endif; ?>
+
+			<?php echo Form::open(array('route' => 'blood.store', 'id' => 'form-create-blood')); ?>
+
+
+				<div class="form-group">
+					<?php echo Form::label('bag-number', trans('messages.bag-number')); ?>
+
+					<?php echo Form::text('bag_number', Input::old('bag_number'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('blood-group', trans('messages.blood-group')); ?>
+
+					<?php echo Form::select('blood_group', $groups, '', array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('volume', trans('messages.volume')); ?>
+
+					<?php echo Form::text('volume', Input::old('volume'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('date-collected', trans('messages.date-collected')); ?>
+
+					<?php echo Form::text('date_collected', Input::old('date_of_reception'), array('class' => 'form-control standard-datepicker')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('expiry', trans('messages.expiry')); ?>
+
+					<?php echo Form::text('expiry_date', Input::old('expiry_date'), array('class' => 'form-control standard-datepicker')); ?>
+
+				</div>
+				<div class="form-group actions-row">
+					<?php echo Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+						array('class' => 'btn btn-primary', 'onclick' => 'submit()')); ?>
+
+				</div>
+
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+<?php $__env->stopSection(); ?>	
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

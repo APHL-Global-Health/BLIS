@@ -1,0 +1,97 @@
+<?php $__env->startSection("content"); ?>
+<div>
+	<ol class="breadcrumb">
+	  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+       <li><a href="<?php echo e(URL::route('stock.index')); ?>"><?php echo Lang::choice('messages.stock', 2); ?></a></li>
+	 	  <li class="active"><?php echo trans('messages.stock-usage'); ?></li>
+	</ol>
+</div>
+<?php if(Session::has('message')): ?>
+	<div class="alert alert-info"><?php echo trans(Session::get('message')); ?></div>
+<?php endif; ?>
+<?php if($errors->all()): ?>
+                <div class="alert alert-danger">
+                    <?php echo HTML::ul($errors->all()); ?>
+
+                </div>
+<?php endif; ?>
+<div class="panel panel-primary">
+	<div class="panel-heading ">
+		<span class="glyphicon glyphicon-user"></span>
+		<?php echo trans('messages.stock-usage'); ?>
+
+	</div>
+	<div class="panel-body">
+        <div class="col-md-8">
+    		   <?php echo Form::open(array('route' => array('stock.saveUsage', $stock->id), 'method' => 'POST')); ?>
+
+                <?php echo Form::hidden('stock_id', $stock->id); ?>
+
+                <div class="form-group">
+                    <?php echo Form::label('signed-out', trans('messages.signed-out')); ?>
+
+                    <?php echo Form::text('quantity_used', Input::old('quantity_used'), array('class' => 'form-control')); ?>
+
+                </div>
+                <div class="form-group">
+                    <?php echo Form::label('date-of-usage', trans('messages.date-of-usage')); ?>
+
+                    <?php echo Form::text('date_of_usage', Input::old('date_of_usage'), 
+                            array('class' => 'form-control standard-datepicker')); ?>
+
+                </div>
+                <div class="form-group">
+                    <?php echo Form::label('request', Lang::choice('messages.top-up', 1)); ?>
+
+                    <?php foreach($requests as $request): ?>
+                        <?php if( (count($request->usage)>0 && ($request->quantity_ordered-$request->issued())>0) || count($request->usage)==0): ?>
+                        <div class="radio col-sm-offset-3">
+                            <label>
+                                <input type="radio" name="request_id" id="request_id" value="<?php echo $request->id; ?>" <?php echo ($record == $request->id||Input::old('request_id')) ? 'checked' : ''; ?>>
+                                <?php echo $request->item->name.'('.(count($request->usage)>0?$request->quantity_ordered-$request->issued():$request->quantity_ordered).') - '.$request->testCategory->name.'('.($request->remarks?$request->remarks:$request->user->name).')'; ?>
+
+                            </label>
+                        </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="form-group">
+                    <?php echo Form::label('issued-by', trans('messages.issued-by')); ?>
+
+                    <?php echo Form::text('issued_by', Input::old('issued_by'), array('class' => 'form-control')); ?>
+
+                </div>
+                <div class="form-group">
+                    <?php echo Form::label('received-by', trans('messages.received-by')); ?>
+
+                    <?php echo Form::text('received_by', Input::old('received_by'), array('class' => 'form-control')); ?>
+
+                </div>
+                <div class="form-group">
+                    <?php echo Form::label('remarks', trans("messages.remarks")); ?>
+
+                    <?php echo Form::textarea('remarks', Input::old('remarks'), array('class' => 'form-control', 'rows' => '2')); ?>
+
+                </div>
+
+                <div class="form-group actions-row">
+                        <?php echo Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+                            array('class' => 'btn btn-primary', 'onclick' => 'submit()')); ?>
+
+                </div>
+            <?php echo Form::close(); ?>
+
+    	</div>
+        <div class="col-md-4">
+            <ul class="list-group">
+                <li class="list-group-item"><strong><?php echo Lang::choice('messages.item', 1).': '.$stock->item->name; ?></strong></li>
+                <li class="list-group-item"><h5><strong><?php echo trans("messages.unit").': '; ?></strong><?php echo $stock->item->unit; ?></h5></li>
+                <li class="list-group-item"><h5><strong><?php echo trans('messages.lot-no').': '; ?></strong><?php echo $stock->lot; ?></h5></li>
+                <li class="list-group-item"><h5><strong><?php echo trans('messages.available-qty').': '; ?></strong><?php echo $stock->quantity(); ?></h5></li>                      
+            </ul>
+        </div>
+    </div>	
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
