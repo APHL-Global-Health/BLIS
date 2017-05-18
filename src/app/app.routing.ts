@@ -37,7 +37,59 @@ export const routes: Routes = [
       {
         path: 'tests',
         loadChildren: './tests/tests.module#TestsModule'
-      }
+      },
+      {
+        path: 'instruments',
+        loadChildren: './instruments/instruments.module#InstrumentModule'
+      },
+      {
+        path: 'facilities',
+        loadChildren: './facilities/facilities.module#FacilitiesModule'
+      },
+      {
+        path: 'surveillance',
+        loadChildren: './surveillance/surveillance.module#SurveillanceModule'
+      },      
+      {
+        path: 'barcode',
+        loadChildren: './barcode/barcode.module#BarcodeModule'
+      },
+      {
+        path: 'interfacedEquipment',
+        loadChildren: './interfacedEquipment/interfacedEquipment.module#InterfacedEquipmentModule'
+      },
+       {
+        path: 'testcategory',
+        loadChildren: './testcategory/testcategory.module#TestCategoryModule'
+      },
+       {
+        path: 'specimen',
+        loadChildren: './specimen/specimen.module#SpecimenModule'
+      },
+       {
+        path: 'specimenrejection',
+        loadChildren: './specimenrejection/specimenrejection.module#SpecimenRejectionModule'
+      },
+        {
+        path: 'testtype',
+        loadChildren: './testtypes/testtype.module#TestTypeModule'
+      },
+        {
+        path: 'drugs',
+        loadChildren: './drugs/drugs.module#DrugsModule'
+      },
+      {
+        path: 'organisms',
+        loadChildren: './organisms/organisms.module#OrganismsModule'
+      },
+      {
+        path: 'critical',
+        loadChildren: './critical/critical.module#CriticalModule'
+      },
+        {
+        path: 'microbiology',
+        loadChildren: './microbiology/microbiology.module#MicrobiologyModule'
+      }      
     ]
   },
   {

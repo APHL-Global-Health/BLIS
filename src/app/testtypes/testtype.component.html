@@ -1,0 +1,204 @@
+<div class="animated fadeIn">
+  <div class="row">
+      <div class="card">
+        <div class="card-header">
+          <strong>Test Types </strong>
+           <button type="button" class="btn btn-primary" data-toggle="modal" (click)="addTestTypeModal.show()">New Test Type</button>
+        </div>
+        <div class="card-block">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Target Turnaround Time</th>
+            <th>Prevalence Threshold</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Brucella</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" (click)="editTestTypeModal.show()">View</button>                
+                <button type="button" class="btn btn-success" data-toggle="modal" (click)="editTestTypeModal.show()">Edit</button>    
+              </td>
+            </tr>
+          </tbody>
+        </table>          
+        </div>
+      </div>  
+  </div>
+  <!--/.row-->
+</div>
+<!--Add new patient-->
+<div bsModal #addTestTypeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">New Test Type</h4>
+        <button type="button" class="close" (click)="addTestTypeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">          
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="specimenname">Name:</label>
+                <input type="text" class="form-control" id="specimenname" placeholder="e.g.Plasma">
+              </div>
+            </div>
+          </div><!--/.row-->      
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="labsection">Lab Section</label>
+                <select class="form-control" id="labsection">
+                <option>-Select Lab Section-</option>
+                <option>In Patient</option>
+                <option>Out Patient</option>
+              </select>
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label">Select Specimen Type</label>
+            <div class="col-md-9">
+              <div class="checkbox">
+                <label for="specimen1">
+                  <input type="checkbox" id="specimen1" name="specimen1" value="option1"> Ascitic Tap
+                </label>
+              </div>
+              <div class="checkbox">
+                <label for="specimen2">
+                  <input type="checkbox" id="specimen2" name="specimen2" value="option2"> Aspirate
+                </label>
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="turnaroundtime">Target Turnaround Time</label>
+                <input type="button" class="form-control" id="turnaroundtime">
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="showDiv = !showDiv">Add New Measure</button>
+              </div>
+            </div>
+          </div><!--/.row-->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="prevalence">Prevalence Threshold</label>
+                <input type="text" class="form-control" id="prevalence">
+              </div>
+            </div>
+          </div><!--/.row-->   
+          <div class="row" ng-switch="showDiv">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="prevalence">Yes</label>
+                <input type="text" class="form-control" id="prevalence">
+              </div>
+            </div>
+          </div><!--/.row-->    
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label">Show Culture Worksheet?</label>
+            <div class="col-md-9">
+              <div class="checkbox">
+                <label for="cultureworksheet">
+                  <input type="checkbox" id="cultureworksheet" name="cultureworksheet" value=""> 
+                </label>
+              </div>              
+            </div>
+          </div><!--/.row-->       
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label">Can Order Test?</label>
+            <div class="col-md-9">
+              <div class="checkbox">
+                <label for="ordertest">
+                  <input type="checkbox" id="ordertest" name="ordertest" value=""> 
+                </label>
+              </div>              
+            </div>
+          </div><!--/.row-->
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label">Accredited?</label>
+            <div class="col-md-9">
+              <div class="checkbox">
+                <label for="accredited">
+                  <input type="checkbox" id="accredited" name="accredited" value=""> 
+                </label>
+              </div>              
+            </div>
+          </div><!--/.row-->
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addTestTypeModal.hide()">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--Edit new patient-->
+
+<div bsModal #editTestTypeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Specimen</h4>
+        <button type="button" class="close" (click)="editTestTypeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="specimenname">Name:</label>
+                <input type="text" class="form-control" id="specimenname" placeholder="e.g. Lance Opiyo">
+              </div>
+            </div>
+          </div><!--/.row-->            
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description">
+              </div>
+            </div>
+          </div><!--/.row-->
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="editTestTypeModal.hide()">Close</button>
+        <button type="button" class="btn btn-success">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

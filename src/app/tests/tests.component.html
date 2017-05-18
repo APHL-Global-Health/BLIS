@@ -21,11 +21,11 @@
           </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2150</td>
-              <td>2150</td>
+            <tr *ngFor="let test of tests" >
               <td>Lance Opiyo</td>
-              <td>1980-03-29</td>
+              <td>{{test.requested_by}}</td>
+              <td>{{test.intepretation}}</td>
+              <td>Lance Opiyo</td>
               <td>Lance Opiyo</td>
               <td>PAR-17</td>
               <td>Out Patient</td>
@@ -124,21 +124,21 @@
               </div>
           </div>
           </div><!--/.row-->
-             <div class="form-group row">
-              <label class="col-md-3 form-control-label">Test</label>
-              <div class="col-md-9">
-                <div class="checkbox">
-                  <label for="testtype1">
-                    <input type="checkbox" id="testtype1" name="testtype1" value="option1"> BS for MPS
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label for="testtype2">
-                    <input type="checkbox" id="testtype2" name="testtype2" value="option2"> HB
-                  </label>
-                </div>
+           <div class="form-group row">
+            <label class="col-md-3 form-control-label">Test</label>
+            <div class="col-md-9">
+              <div class="checkbox">
+                <label for="testtype1">
+                  <input type="checkbox" id="testtype1" name="testtype1" value="option1"> BS for MPS
+                </label>
+              </div>
+              <div class="checkbox">
+                <label for="testtype2">
+                  <input type="checkbox" id="testtype2" name="testtype2" value="option2"> HB
+                </label>
               </div>
             </div>
+          </div><!--/.row-->
         </div>
       </div>
       </div>

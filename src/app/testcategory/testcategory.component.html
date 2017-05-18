@@ -1,0 +1,113 @@
+<div class="animated fadeIn">
+  <div class="row">
+      <div class="card">
+        <div class="card-header">
+          <strong>Lab Section Details</strong>
+           <button type="button" class="btn btn-primary" data-toggle="modal" (click)="addTestCategoryModal.show()">New Lab Section</button>
+        </div>
+        <div class="card-block">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Blood Tranfusion</td>
+              <td>N/A</td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" (click)="editTestCategoryModal.show()">View</button>                
+                <button type="button" class="btn btn-success" data-toggle="modal" (click)="editTestCategoryModal.show()">Edit</button>    
+              </td>
+            </tr>
+          </tbody>
+        </table>          
+        </div>
+      </div>  
+  </div>
+  <!--/.row-->
+</div>
+<!--Add new patient-->
+<div bsModal #addTestCategoryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">New Lab Section</h4>
+        <button type="button" class="close" (click)="addTestCategoryModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">          
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="testcategory">Name:</label>
+                <input type="text" class="form-control" id="testcategory" placeholder="e.g.Blood Tranfusion">
+              </div>
+            </div>
+          </div><!--/.row-->        
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description">
+              </div>
+            </div>
+          </div><!--/.row-->
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addTestCategoryModal.hide()">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--Edit new patient-->
+
+<div bsModal #editTestCategoryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Patient</h4>
+        <button type="button" class="close" (click)="editTestCategoryModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="testcategory">Name:</label>
+                <input type="text" class="form-control" id="testcategory" placeholder="e.g. Blood Tranfusion">
+              </div>
+            </div>
+          </div><!--/.row-->            
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description">
+              </div>
+            </div>
+          </div><!--/.row-->
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="editTestCategoryModal.hide()">Close</button>
+        <button type="button" class="btn btn-success">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
