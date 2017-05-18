@@ -1,0 +1,117 @@
+<?php $__env->startSection("content"); ?>
+    <div>
+        <ol class="breadcrumb">
+          <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+          <li><a href="<?php echo URL::route('control.resultsIndex'); ?>"><?php echo Lang::choice('messages.controlresults',2); ?></a></li>
+          <li class="active"><?php echo trans('messages.enter-control-results'); ?></li>
+        </ol>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading ">
+            <div class="container-fluid">
+                <div class="row less-gutter">
+                    <div class="col-md-11">
+                        <span class="glyphicon glyphicon-user"></span> <?php echo trans('messages.controlresults'); ?>
+
+                    </div>
+                    <div class="col-md-1">
+                        <a class="btn btn-sm btn-primary pull-right"  href="#" onclick="window.history.back();return false;"
+                            alt="<?php echo trans('messages.back'); ?>" title="<?php echo trans('messages.back'); ?>">
+                            <span class="glyphicon glyphicon-backward"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+        <!-- if there are creation errors, they will show here -->
+            
+            <?php if($errors->all()): ?>
+                <div class="alert alert-danger">
+                    <?php echo HTML::ul($errors->all()); ?>
+
+                </div>
+            <?php endif; ?>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                    <?php echo Form::open(array('route' => array('control.saveResults',$control->id), 'method' => 'POST',
+                        'id' => 'form-enter-results')); ?>
+
+                        <div class="form-group">
+                            <?php echo Form::label('performed-by', trans('messages.performed-by')); ?>
+
+                            <?php echo Form::text('performed_by', Input::old('performed_by'), array('class' => 'form-control')); ?>
+
+                        </div>
+                        <div class="form-group">
+                            <?php echo Form::label('lots', trans('messages.lot-number')); ?>
+
+                            <?php echo Form::select('lot_id', array('') + $lots, '', array('class' => 'form-control')); ?>
+
+                        </div>
+                        <?php foreach($control->controlMeasures as $key => $controlMeasure): ?>
+                            <div class="form-group">
+                                <?php if( $controlMeasure->isNumeric() ): ?> 
+                                    <?php echo Form::label("m_".$controlMeasure->id , $controlMeasure->name); ?>
+
+                                    <?php echo Form::text("m_".$controlMeasure->id, Input::old("m_".$controlMeasure->id), array(
+                                        'class' => 'form-control result-interpretation-trigger')); ?>
+
+                                    <span class='units'>
+                                        <?php echo $controlMeasure->controlMeasureRanges->first()->getRangeUnit(); ?>
+
+                                    </span>
+                                <?php elseif( $controlMeasure->isAlphanumeric() ): ?> 
+                                    <?php echo Form::label("m_".$controlMeasure->id , $controlMeasure->name); ?>
+
+                                    <?php echo Form::select("m_".$controlMeasure->id, array(null => '') +$controlMeasure->controlMeasureRanges->lists('alphanumeric', 'alphanumeric'),
+                                    Input::old('instrument'),
+                                        array('class' => 'form-control result-interpretation-trigger',
+                                        'data-url' => URL::route('test.resultinterpretation'),
+                                        'data-measureid' => $controlMeasure->id
+                                        )); ?>
+
+                                <?php else: ?> 
+                                    <?php echo Form::label("m_".$controlMeasure->id, $controlMeasure->name); ?>
+
+                                    <?php echo Form::text("m_".$controlMeasure->id, $ans, array('class' => 'form-control')); ?>
+
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="form-group actions-row">
+                            <?php echo Form::button('<span class="glyphicon glyphicon-save">
+                                </span> '.trans('messages.save-test-results'),
+                                array('class' => 'btn btn-default', 'onclick' => 'submit()')); ?>
+
+                        </div>
+                    <?php echo Form::close(); ?>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-info">  <!-- Patient Details -->
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><?php echo trans("messages.control-details"); ?></h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p><strong><?php echo Lang::choice('messages.control-name',1); ?></strong></p></div>
+                                        <div class="col-md-9">
+                                            <?php echo $control->name; ?></div></div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p><strong><?php echo Lang::choice("messages.instrument",1); ?></strong></p></div>
+                                        <div class="col-md-9"> <?php echo $control->instrument->name; ?></div>
+                                    </div>
+                                </div>
+                            </div> <!-- ./ panel-body -->
+                        </div> <!-- ./ panel -->
+                    </div>
+                </div>
+            </div>
+        </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

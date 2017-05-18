@@ -1,0 +1,98 @@
+<?php $__env->startSection("content"); ?>
+<div>
+	<ol class="breadcrumb">
+	  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+       <li><a href="<?php echo e(URL::route('item.index')); ?>"><?php echo Lang::choice('messages.stock', 2); ?></a></li>
+	 	  <li class="active"><?php echo trans('messages.new').' '.Lang::choice('messages.stock', 1); ?></li>
+	</ol>
+</div>
+<?php if(Session::has('message')): ?>
+	<div class="alert alert-info"><?php echo trans(Session::get('message')); ?></div>
+<?php endif; ?>
+<?php if($errors->all()): ?>
+                <div class="alert alert-danger">
+                    <?php echo HTML::ul($errors->all()); ?>
+
+                </div>
+<?php endif; ?>
+<div class="panel panel-primary">
+	<div class="panel-heading ">
+		<span class="glyphicon glyphicon-user"></span>
+		<?php echo Lang::choice('messages.stock', 2); ?>
+
+	</div>
+	<div class="panel-body">
+		   <?php echo Form::open(array('route' => 'stock.store', 'id' => 'form-store-stocks')); ?>
+
+            <?php echo Form::hidden('item_id', $item->id); ?>
+
+            <div class="form-group">
+                <?php echo Form::label('lot-no', trans('messages.lot-no')); ?>
+
+                <?php echo Form::text('lot', Input::old('lot'), array('class' => 'form-control', 'rows' => '2')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('batch-no', trans('messages.batch-no')); ?>
+
+                <?php echo Form::text('batch_no', Input::old('batch_no'), array('class' => 'form-control', 'rows' => '2')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('expiry', trans('messages.expiry')); ?>
+
+                <?php echo Form::text('expiry_date', Input::old('expiry_date'), 
+                        array('class' => 'form-control standard-datepicker')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('manufacturer', trans('messages.manufacturer')); ?>
+
+                <?php echo Form::text('manufacturer', Input::old('manufacturer'),array('class' => 'form-control', 'rows' => '2')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('supplier', Lang::choice('messages.supplier', 1)); ?>
+
+                <?php echo Form::select('supplier_id', $suppliers, '', array('class' => 'form-control')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('supplied', trans('messages.supplied')); ?>
+
+                <?php echo Form::text('quantity_supplied', Input::old('quantity_supplied'),array('class' => 'form-control', 'rows' => '2')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('cost-per-unit', trans('messages.cost-per-unit')); ?>
+
+                <?php echo Form::text('cost_per_unit', Input::old('cost_per_unit'),array('class' => 'form-control', 'rows' => '2')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('date-received', trans('messages.date-received')); ?>
+
+                <?php echo Form::text('date_of_reception', Input::old('date_of_reception'), 
+                        array('class' => 'form-control standard-datepicker')); ?>
+
+            </div>
+            <div class="form-group">
+                <?php echo Form::label('remarks', trans('messages.remarks')); ?>
+
+                <?php echo Form::textarea('remarks', Input::old('remarks'), array('class' => 'form-control', 'rows' => '2')); ?>
+
+            </div>
+
+            <div class="form-group actions-row">
+                    <?php echo Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+                        array('class' => 'btn btn-primary', 'onclick' => 'submit()')); ?>
+
+            </div>
+        <?php echo Form::close(); ?>
+
+	</div>
+	
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,30 @@
+<?php $__env->startSection("header"); ?>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand"><?php echo Config::get('kblis.name'); ?> <?php echo Config::get('kblis.version'); ?></a>
+            </div>
+            <div class="grid-2  user-profile">
+                <?php if(Auth::check()): ?>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="user-link">
+                            <a href="javascript:void(0);">
+                                <strong><?php echo Auth::user()->name; ?></strong>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="user-settings">
+                        <div>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <a href='<?php echo URL::to("user/".Auth::user()->id."/edit"); ?>'><?php echo trans('messages.edit-profile'); ?></a>
+                        </div>
+                        <div>
+                            <span class="glyphicon glyphicon-log-out"></span>
+                            <a href="<?php echo URL::route("user.logout"); ?>"><?php echo trans('messages.logout'); ?></a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+<?php echo $__env->yieldSection(); ?>

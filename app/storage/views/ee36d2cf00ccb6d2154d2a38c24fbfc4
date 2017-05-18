@@ -1,0 +1,99 @@
+<?php $__env->startSection("content"); ?>
+
+	<div>
+		<ol class="breadcrumb">
+		  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+		  <li>
+		  	<a href="<?php echo URL::route('critical.index'); ?>"><?php echo Lang::choice('messages.critical',1); ?></a>
+		  </li>
+		  <li class="active"><?php echo Lang::choice('messages.critical', 2); ?></li>
+		</ol>
+	</div>
+	<div class="panel panel-primary">
+		<div class="panel-heading ">
+			<span class="glyphicon glyphicon-adjust"></span>
+			<?php echo trans('messages.create-critical'); ?>
+
+		</div>
+		<div class="panel-body">
+		<!-- if there are creation errors, they will show here -->
+			<?php if($errors->all()): ?>
+				<div class="alert alert-danger">
+					<?php echo HTML::ul($errors->all()); ?>
+
+				</div>
+			<?php endif; ?>
+
+			<?php echo Form::open(array('route' => 'critical.store', 'id' => 'form-create-critical')); ?>
+
+
+				<div class="form-group">
+					<?php echo Form::label('measure_id', Lang::choice('messages.measure', 1)); ?>
+
+					<?php echo Form::select('measure_id', array(0 => '')+$measures,
+						Input::old('measure_id'),	array('class' => 'form-control')); ?>
+
+				</div>
+                <div class="form-group">
+                	<?php echo Form::label('gender', Lang::choice('messages.gender', 1)); ?>
+
+                	<div>
+                		<label class="radio-inline"><?php echo Form::radio('gender', Patient::MALE, true); ?><?php echo trans('messages.male'); ?></label>
+                        <label class="radio-inline"><?php echo Form::radio("gender", Patient::FEMALE, false); ?><?php echo trans('messages.female'); ?></label>
+                        <label class="radio-inline"><?php echo Form::radio("gender", Patient::BOTH, false); ?><?php echo trans('messages.both'); ?></label>
+                    </div>
+                </div>
+				<div class="form-group">
+					<?php echo Form::label('age-min', Lang::choice('messages.age-min', 1)); ?>
+
+					<?php echo Form::text('age_min', Input::old('age_min'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('age-max', Lang::choice('messages.age-max', 1)); ?>
+
+					<?php echo Form::text('age_max', Input::old('age_max'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('normal-lower', Lang::choice('messages.normal-lower', 1)); ?>
+
+					<?php echo Form::text('normal_lower', Input::old('normal_lower'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('normal-upper', Lang::choice('messages.normal-upper', 1)); ?>
+
+					<?php echo Form::text('normal_upper', Input::old('normal_upper'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('critical-low', Lang::choice('messages.critical-low', 1)); ?>
+
+					<?php echo Form::text('critical_low', Input::old('critical_low'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('critical-high', Lang::choice('messages.critical-high', 1)); ?>
+
+					<?php echo Form::text('critical_high', Input::old('critical_high'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group">
+					<?php echo Form::label('unit', Lang::choice('messages.unit', 1)); ?>
+
+					<?php echo Form::text('unit', Input::old('unit'), array('class' => 'form-control')); ?>
+
+				</div>
+				<div class="form-group actions-row">
+					<?php echo Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save'), 
+						array('class' => 'btn btn-primary', 'onclick' => 'submit()')); ?>
+
+				</div>
+
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+<?php $__env->stopSection(); ?>	
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

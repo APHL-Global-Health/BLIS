@@ -1,0 +1,105 @@
+<?php $__env->startSection("content"); ?>
+<div>
+	<ol class="breadcrumb">
+	  <li><a href="<?php echo e(URL::route('user.home')); ?>"><?php echo trans('messages.home'); ?></a></li>
+	  <li class="active"><a href="<?php echo URL::route('reports.patient.index'); ?>"><?php echo Lang::choice('messages.report', 2); ?></a></li>
+	  <li class="active"><?php echo trans('messages.daily-log'); ?></li>
+	</ol>
+</div>
+<div class='container-fluid'>
+	<?php echo Form::open(array('route' => array('reports.aggregate.cd4'), 'class' => 'form-inline', 'role' => 'form')); ?>
+
+		<div class='row'>
+	    	<div class="col-sm-4">
+		    	<div class="row">
+					<div class="col-sm-2">
+					    <?php echo Form::label('start', trans('messages.from')); ?>
+
+					</div>
+					<div class="col-sm-2">
+					    <?php echo Form::text('start', isset($input['start'])?$input['start']:date('Y-m-01'), 
+				                array('class' => 'form-control standard-datepicker')); ?>
+
+			        </div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+		    	<div class="row">
+					<div class="col-sm-2">
+					    <?php echo Form::label('end', trans('messages.to')); ?>
+
+					</div>
+					<div class="col-sm-2">
+					    <?php echo Form::text('end', isset($input['end'])?$input['end']:date('Y-m-d'), 
+				                array('class' => 'form-control standard-datepicker')); ?>
+
+			        </div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+		    	<div class="row">
+					<div class="col-sm-3">
+					  	<?php echo Form::button("<span class='glyphicon glyphicon-filter'></span> ".trans('messages.view'), 
+			                array('class' => 'btn btn-info', 'id' => 'filter', 'type' => 'submit')); ?>
+
+			        </div>
+			        <div class="col-sm-1">
+						<?php echo Form::submit(trans('messages.export-to-word'), 
+				    		array('class' => 'btn btn-success', 'id'=>'word', 'name'=>'word')); ?>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php echo Form::close(); ?>
+
+</div>
+<br />
+<div class="panel panel-primary">
+	<div class="panel-heading ">
+		<span class="glyphicon glyphicon-user"></span>
+		<?php echo trans('messages.cd4-report'); ?>
+
+	</div>
+	<div class="panel-body">
+		<div id="specimen_records_div">
+		  <?php echo $__env->make("reportHeader", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+		  	<?php if(Session::has('message')): ?>
+				<div class="alert alert-info"><?php echo trans(Session::get('message')); ?></div>
+			<?php endif; ?>	
+			<strong>
+				<p> <?php echo trans('messages.cd4-report'); ?> - 
+					<?php $from = isset($input['start'])?$input['start']:date('01-m-Y');?>
+					<?php $to = isset($input['end'])?$input['end']:date('d-m-Y');?>
+					<?php if($from!=$to): ?>
+						<?php echo trans('messages.from').' '.$from.' '.trans('messages.to').' '.$to; ?>
+
+					<?php else: ?>
+						<?php echo trans('messages.for').' '.date('d-m-Y'); ?>
+
+					<?php endif; ?>
+				</p>
+			</strong>
+			<table class="table table-bordered">
+				<tbody>
+					<tr>
+					<th></th>
+					<?php foreach($columns as $column): ?>
+						<th><?php echo $column; ?></th>
+					<?php endforeach; ?>
+					</tr>
+					<?php foreach($rows as $row): ?>
+						<tr>
+							<td><?php echo $row; ?></td>
+							<?php foreach($columns as $column): ?>
+								<td><?php echo $counts[$column][$row]; ?></td>
+							<?php endforeach; ?>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div> <!-- /#specimen_records_div -->
+	</div> <!-- /.panel-body -->
+</div> <!-- /.panel -->
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make("layout", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

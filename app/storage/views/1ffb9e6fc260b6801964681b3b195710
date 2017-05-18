@@ -1,0 +1,42 @@
+<div class="display-details">
+    <?php echo Form::hidden('specimen_id', $test->specimen_id); ?>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <strong><?php echo Lang::choice('messages.test-type',1); ?></strong>
+            </div>
+            <div class="col-md-8">
+                <?php echo $test->testType->name; ?>
+
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-4">
+                <strong><?php echo trans('messages.specimen-number'); ?></strong>
+            </div>
+            <div class="col-md-8">
+                <?php echo $test->specimen_id; ?>
+
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-4">
+                <strong><?php echo trans('messages.specimen-status'); ?></strong>
+            </div>
+            <div class="col-md-8">
+                <?php echo trans('messages.'.$test->specimen->specimenStatus->name); ?>
+
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-4">
+                <strong><?php echo Lang::choice('messages.specimen-type',2); ?></strong>
+            </div>
+            <div class="col-md-8">
+                <?php echo Form::select('specimen_type', $test->testType->specimenTypes->lists('name','id'),
+                    array($test->specimen->specimen_type_id), array('class' => 'form-control')); ?></p>
+            </div>
+        </div>
+    </div>
+</div>
